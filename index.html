@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Tangkap Nyamuk – Healthy Vegetables</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--sky:#d6f1f7;--sky2:#f3fbe4;--ink:#17402b;--card:#fffdf4;--red:#e0463a;--blue:#2f6fdb;--ok:#2e9d4f;--tag:#fff;--tagink:#17402b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky:#12303a;--sky2:#1a3a26;--ink:#e9f7e4;--card:#1f3d2c;--tag:#f5f3e6;--tagink:#17402b}}
+:root[data-theme="dark"]{--sky:#12303a;--sky2:#1a3a26;--ink:#e9f7e4;--card:#1f3d2c;--tag:#f5f3e6;--tagink:#17402b}
+*,*:before,*:after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:'Baloo 2','Trebuchet MS',system-ui,sans-serif;color:var(--ink);background:linear-gradient(var(--sky),var(--sky2));overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.screen{display:none;height:100%;flex-direction:column}
+.screen.on{display:flex}
+#menu,#end{align-items:center;justify-content:center;text-align:center;gap:14px;padding:20px}
+h1{font-size:clamp(2.4rem,8vw,5rem);margin:0;font-weight:800;line-height:1}
+h1 small{display:block;font-size:.32em;font-weight:500;margin-top:8px}
+.btn{font:inherit;font-weight:700;font-size:clamp(1.2rem,3vw,1.8rem);border:0;border-radius:18px;padding:14px 34px;color:#fff;background:var(--ok);cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.btn.b{background:var(--blue)}.btn.g{background:#7a8a7e}
+.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.hint{max-width:34rem;font-size:1.05rem;opacity:.85;margin:0}
+#hud{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-weight:700;font-size:clamp(1rem,2.4vw,1.6rem)}
+.sc{padding:2px 16px;border-radius:14px;color:#fff;background:var(--ok)}
+.sc.r{background:var(--red)}.sc.bl{background:var(--blue)}
+#q{margin:0 auto;max-width:min(920px,94%);background:var(--card);border-radius:20px;padding:10px 20px;text-align:center;font-weight:700;font-size:clamp(1.1rem,2.8vw,2rem);line-height:1.25;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+#field{position:relative;flex:1;margin:10px 0 0;overflow:hidden;background:linear-gradient(transparent 80%,#8cc86a 80%)}
+.zone{position:absolute;top:0;bottom:0;overflow:hidden}
+.zone.full{left:0;right:0}
+.zone.l{left:0;width:50%;background:rgba(224,70,58,.10)}
+.zone.r{right:0;width:50%;background:rgba(47,111,219,.10);border-left:4px dashed rgba(23,64,43,.4)}
+.mq{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;padding:8px;cursor:pointer;touch-action:none;will-change:transform}
+.bug{font-size:clamp(2.6rem,6vw,4.2rem);line-height:1;display:block;animation:buzz .18s infinite alternate}
+@keyframes buzz{to{transform:translateY(-4px) rotate(6deg)}}
+.tag{background:var(--tag);color:var(--tagink);border:3px solid var(--ink);border-radius:14px;padding:2px 12px;font-weight:700;font-size:clamp(.95rem,2vw,1.4rem);max-width:210px;text-align:center;line-height:1.15}
+.mq.bad{animation:poof .45s forwards;pointer-events:none}
+.mq.bad .tag{background:var(--red);color:#fff}
+.mq.win .tag{background:var(--ok);color:#fff}
+.mq.fade{opacity:.25;pointer-events:none;transition:opacity .4s}
+@keyframes poof{to{opacity:0;filter:blur(3px)}}
+.pop{position:absolute;font-weight:800;font-size:2rem;pointer-events:none;animation:up .9s forwards;z-index:5;text-shadow:0 2px 0 #fff}
+@keyframes up{to{transform:translateY(-70px);opacity:0}}
+#msg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%) scale(0);background:var(--card);border:4px solid var(--ok);border-radius:22px;padding:8px 26px;font-weight:800;font-size:clamp(1.4rem,4vw,2.6rem);z-index:9;transition:transform .2s;pointer-events:none;text-align:center}
+#msg.on{transform:translate(-50%,-50%) scale(1)}
+@media (prefers-reduced-motion:reduce){.bug{animation:none}}
+</style>
+</head>
+<body>
+<section id="menu" class="screen on">
+  <h1>🦟 Tangkap Nyamuk<small>English Grade 6 · Chapter 1 · Healthy Vegetables</small></h1>
+  <p class="hint">Baca soal, lalu sentuh nyamuk yang membawa jawaban yang benar. Salah sentuh: skor berkurang 5.</p>
+  <div class="row">
+    <button class="btn" onclick="start('solo')">Mode Solo</button>
+    <button class="btn b" onclick="start('battle')">Mode Battle</button>
+  </div>
+  <p class="hint">Battle: layar dibagi dua. Tim Merah di kiri, Tim Biru di kanan. Siapa yang menyentuh jawaban benar lebih dulu, dia dapat poin.</p>
+</section>
+
+<section id="game" class="screen">
+  <div id="hud"><span id="h1" class="sc"></span><span id="hn"></span><span id="h2" class="sc bl"></span></div>
+  <div id="q"></div>
+  <div id="field"><div id="msg"></div></div>
+</section>
+
+<section id="end" class="screen">
+  <h1 id="et"></h1>
+  <p class="hint" id="es"></p>
+  <div class="row">
+    <button class="btn" id="again">Main lagi</button>
+    <button class="btn g" onclick="show('menu')">Menu</button>
+  </div>
+</section>
+
+<script>
+// [soal, [A,B,C,D], index jawaban benar]
+const Q=[
+["Rina is holding a vegetable. It is long, orange, and crunchy. What vegetable is she holding?",["spinach","carrot","cabbage","potato"],1],
+["“It is green and leafy.” Which vegetable matches the description?",["spinach","carrot","potato","eggplant"],0],
+["Potato is usually ....",["long and orange","green and leafy","brown and round","white and curly"],2],
+["Which sentence correctly describes a cauliflower?",["It is brown and round.","It is white and curly.","It is orange and crunchy.","It is green and leafy."],1],
+["“It is green, long, and thin.” Which vegetable is it?",["snake beans","potatoes","peas","cauliflower"],0],
+["“It is long and purple or green.” The vegetable is ....",["broccoli","spinach","eggplant","carrot"],2],
+["Which sentence is grammatically correct?",["Carrots is long and orange.","Carrot are long and orange.","Carrots are long and orange.","Carrots am long and orange."],2],
+["Which sentence correctly describes spinach?",["Spinach are green and leafy.","Spinach is green and leafy.","Spinach am green and leafy.","Spinach is brown and round."],1],
+["Bima likes spinach. What should he say?",["I don't like spinach.","I likes spinach.","I like spinach.","I am like spinach."],2],
+["Sinta does not like cabbage. Which sentence is correct?",["I don't like cabbage.","I doesn't like cabbage.","I not like cabbage.","I don't likes cabbage."],0],
+["A: What vegetable do you like?  B: ....",["Yes, I do.","I like carrots.","No, I don't.","It is orange."],1],
+["A: Do you like bean sprouts?  B: Yes, ....",["I am","I do","I like","I don't"],1],
+["A: Do you like chilies?  B: No, ....",["I do","I am","I don't","I doesn't"],2],
+["Dina: ❤️ carrots, ❌ cabbage. Which sentence is TRUE?",["Dina doesn't like carrots.","Dina likes cabbage.","Dina likes carrots.","Dina likes all vegetables."],2],
+["Andi says: “I like corn because it is sweet.” Why does Andi like corn?",["Because it is green.","Because it is sweet.","Because it is bitter.","Because it is crunchy."],1],
+["Rani says: “I like broccoli.” Siti also likes broccoli. What should Siti say?",["I don't like broccoli, either.","I like broccoli, too.","I like broccoli, either.","I doesn't like broccoli, too."],1],
+["Dodi says: “I don't like chilies.” Raka also doesn't like chilies. What should Raka say?",["I like chilies, too.","I don't like chilies, too.","I don't like chilies, either.","I doesn't like chilies, either."],2],
+["Which sentence uses “too” correctly?",["I don't like cabbage, too.","I like spinach, too.","I doesn't like corn, too.","I don't likes carrots, too."],1],
+["Which sentence uses “either” correctly?",["I like potatoes, either.","I don't like potatoes, either.","I likes potatoes, either.","I am not like potatoes, either."],1],
+["What did Little Red Hen have?",["Carrot, potato, and corn seeds","Bean sprout, snake bean, and spinach seeds","Cabbage, lettuce, and pumpkin seeds","Broccoli, cauliflower, and peas"],1],
+["Why did Goat and Duck not help Little Red Hen?",["They were sleeping.","They did not have seeds.","They did not like the vegetables.","They did not know how to plant."],2],
+["What did Little Red Hen make from the vegetables?",["Soup","Salad","Pecel","Fried rice"],2],
+["What can we learn from the story?",["We should only work when we get food.","We should help others and take responsibility.","We should not eat vegetables.","We should never work together."],1],
+["What did they do before eating the pecel?",["They planted seeds.","They cooked vegetables.","They washed their hands.","They went to the garden."],2],
+["Your friend asks: “What vegetable do you like?” You like carrots because they are crunchy. Best answer?",["I like carrots because they are crunchy.","I don't like carrots because they are crunchy.","Carrots are brown and round.","Yes, I do carrots."],0],
+["Broccoli: green, curly, bitter. Which sentence is NOT correct?",["Broccoli is green.","Broccoli is curly.","Broccoli is bitter.","Broccoli is orange."],3],
+["Your teacher asks you to describe a carrot. Which answer is the BEST?",["Carrots are long and crunchy. They are orange.","Carrots is green and leafy.","Carrot don't like cabbage.","I like carrots, either."],0],
+["Fajar: I like spinach. Rudi: I like spinach, too. Fajar: I don't like chilies. Rudi: ....",["I like chilies, too.","I don't like chilies, either.","I likes chilies, too.","I don't likes chilies, either."],1],
+["Sarah wants to know whether her friend likes cabbage. Which question should she ask?",["What cabbage do you like?","Do you like cabbage?","Why cabbage are green?","Is cabbage like you?"],1],
+["“My favorite vegetable is carrot. Carrots are long and crunchy. They are orange. I like carrots because they are delicious and healthy.” What is the main purpose?",["To tell how to cook carrots","To describe and express a preference for carrots","To tell a story about carrots","To ask someone to buy carrots"],1]
+];
+const ROUND=10; // jumlah soal per permainan
+const $=id=>document.getElementById(id);
+let mode,qs,qi,sc,mos=[],locked,zones=[],last=0;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function start(m){
+  mode=m;qs=shuffle(Q).slice(0,ROUND);qi=0;sc=[0,0];
+  $('again').onclick=()=>start(m);
+  show('game');
+  const f=$('field');f.querySelectorAll('.zone').forEach(z=>z.remove());
+  zones=m==='solo'?['full']:['l','r'];
+  zones=zones.map(c=>{const z=document.createElement('div');z.className='zone '+c;f.appendChild(z);return z});
+  $('h2').style.display=m==='solo'?'none':'';
+  $('h1').className='sc'+(m==='solo'?'':' r');
+  next();
+}
+function hud(){
+  $('h1').textContent=(mode==='solo'?'Skor: ':'Tim Merah: ')+sc[0];
+  $('h2').textContent='Tim Biru: '+sc[1];
+  $('hn').textContent='Soal '+Math.min(qi+1,qs.length)+' / '+qs.length;
+}
+function next(){
+  if(qi>=qs.length)return end();
+  locked=false;mos=[];
+  const [t,o,c]=qs[qi];$('q').textContent=t;
+  zones.forEach((z,zi)=>{
+    z.innerHTML='';
+    shuffle(o.map((txt,i)=>({txt,ok:i===c}))).forEach(opt=>mk(z,zi,opt));
+  });
+  hud();
+}
+function mk(z,zi,opt){
+  const el=document.createElement('div');el.className='mq';
+  el.innerHTML='<span class="bug">🦟</span><span class="tag"></span>';
+  el.querySelector('.tag').textContent=opt.txt;
+  z.appendChild(el);
+  const m={el,zi,ok:opt.ok,z,w:el.offsetWidth,h:el.offsetHeight,dead:false};
+  m.x=Math.random()*Math.max(1,z.clientWidth-m.w);
+  m.y=Math.random()*Math.max(1,z.clientHeight-m.h);
+  const a=Math.random()*6.28,s=70+Math.random()*60;
+  m.vx=Math.cos(a)*s;m.vy=Math.sin(a)*s*.8;
+  el.addEventListener('pointerdown',e=>{e.preventDefault();hit(m,e)});
+  mos.push(m);
+}
+function pop(m,txt,col){
+  const p=document.createElement('div');p.className='pop';p.textContent=txt;p.style.color=col;
+  p.style.left=(m.x+m.w/2-20)+'px';p.style.top=m.y+'px';m.z.appendChild(p);
+  setTimeout(()=>p.remove(),900);
+}
+function hit(m,e){
+  if(locked||m.dead)return;
+  if(m.ok){
+    locked=true;sc[m.zi]+=10;pop(m,'+10','#2e9d4f');
+    m.el.classList.add('win');
+    mos.forEach(o=>{if(o!==m)o.el.classList.add('fade')});
+    const who=mode==='solo'?'Benar!':(m.zi?'Tim Biru':'Tim Merah')+' benar!';
+    const g=$('msg');g.textContent=who+' 🎉';g.classList.add('on');
+    hud();
+    setTimeout(()=>{g.classList.remove('on');qi++;next()},1300);
+  }else{
+    m.dead=true;sc[m.zi]=Math.max(0,sc[m.zi]-5);pop(m,'-5','#e0463a');
+    m.el.classList.add('bad');hud();
+    setTimeout(()=>m.el.remove(),450);
+  }
+}
+function end(){
+  show('end');
+  if(mode==='solo'){
+    const p=sc[0]/(ROUND*10);
+    $('et').textContent=p>=.8?'Hebat! 🌟':p>=.5?'Bagus! 👍':'Ayo coba lagi! 💪';
+    $('es').textContent='Skor akhir: '+sc[0]+' dari '+ROUND*10;
+  }else{
+    $('et').textContent=sc[0]===sc[1]?'Seri! 🤝':(sc[0]>sc[1]?'Tim Merah menang! 🏆':'Tim Biru menang! 🏆');
+    $('es').textContent='Merah '+sc[0]+'  –  Biru '+sc[1];
+  }
+}
+function tick(t){
+  const dt=Math.min(.05,(t-last)/1000||0);last=t;
+  for(const m of mos){
+    if(m.dead||!m.el.isConnected)continue;
+    const W=m.z.clientWidth-m.w,H=m.z.clientHeight-m.h;
+    m.x+=m.vx*dt;m.y+=m.vy*dt;
+    if(m.x<0){m.x=0;m.vx=Math.abs(m.vx)}else if(m.x>W){m.x=W;m.vx=-Math.abs(m.vx)}
+    if(m.y<0){m.y=0;m.vy=Math.abs(m.vy)}else if(m.y>H){m.y=H;m.vy=-Math.abs(m.vy)}
+    if(Math.random()<.01){m.vx+=(Math.random()-.5)*60;m.vy+=(Math.random()-.5)*60}
+    m.el.style.transform='translate('+m.x+'px,'+m.y+'px)';
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
